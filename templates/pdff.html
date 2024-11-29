@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Layer PDF Viewer with Highlighter</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+        #textLayerContainer {
+            position: relative;
+            width: 60%;
+            border: 1px solid #ccc;
+            padding: 20px;
+            overflow-y: auto;
+            height: 80vh;
+        }
+        .textLayer {
+            pointer-events: auto;
+            position: relative;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+        }
+        button {
+            margin: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <form method="post" id="ttsForm" enctype="multipart/form-data">
+            {% csrf_token %}
+            <h1>Upload and View PDF with Highlighter</h1>
+            <input type="file" id="fileInput" accept="application/pdf" />
+            <input type="text" id="text" placeholder="Enter text to convert to audio" />
+            <button id="uploadBtn" type="button">Upload PDF</button>
+            <button id="prevPageBtn" type="button">Previous Page</button>
+            <button id="nextPageBtn" type="button">Next Page</button>
+            <span>Page: <span id="pageNum">1</span> / <span id="pageCount">0</span></span>
+            <button class="btn1" type="submit">Generate Audio</button>
+        </form>
+        <audio id="audioPlayer" controls>
+            <source id="audioSource" type="audio/mp3">
+            Your browser does not support the audio element.
+        </audio>
+    </div>
+
+    <div id="textLayerContainer">
+        <div id="textLayer" class="textLayer"></div>
+    </div>
+
+    <script>
+        document.getElementById("ttsForm").addEventListener("submit", function (e) {
+            e.preventDefault(); // Prevent form from reloading the page
+
+            // Prepare form data
+            const formData = new FormData();
+            const textInput = document.getElementById("text").value;
+            const pdfFile = document.getElementById("fileInput").files[0];
+
+            formData.append("text", textInput); // Text input
+            if (pdfFile) formData.append("pdf", pdfFile); // PDF file
+
+            // Send the data to the Django backend
+            fetch("{% url 'tts' %}", {
+                method: "POST",
+                body: formData,
+                headers: {
+                    "X-CSRFToken": "{{ csrf_token }}"
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log("Response from server:", data); // Log the response data
+                    if (data.audio_url) {
+                        const audioPlayer = document.getElementById("audioPlayer");
+                        const audioSource = document.getElementById("audioSource");
+                        audioSource.src = data.audio_url; // Set the source to the audio URL returned from the server
+                        audioPlayer.style.display = "block"; // Show the audio player
+                        audioPlayer.load(); // Load the new audio
+                        audioPlayer.play(); // Automatically play the audio
+                    } else {
+                        alert("Error: " + data.error);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert("An error occurred while generating the audio. Please try again.");
+                });
+        });
+
+        const uploadBtn = document.getElementById('uploadBtn');
+        const prevPageBtn = document.getElementById('prevPageBtn');
+        const nextPageBtn = document.getElementById('nextPageBtn');
+        const pageNumElem = document.getElementById('pageNum');
+        const pageCountElem = document.getElementById('pageCount');
+        const textLayerDiv = document.getElementById('textLayer');
+
+        let pdf = null;
+        let pageNumber = 1;
+
+        uploadBtn.addEventListener('click', () => {
+            const file = document.getElementById('fileInput').files[0];
+            if (file && file.type === 'application/pdf') {
+                const fileReader = new FileReader();
+                fileReader.onload = function (event) {
+                    const pdfData = new Uint8Array(event.target.result);
+                    pdfjsLib.getDocument(pdfData).promise.then(doc => {
+                        pdf = doc;
+                        pageCountElem.textContent = doc.numPages;
+                        renderPage(pageNumber);
+                    });
+                };
+                fileReader.readAsArrayBuffer(file);
+            } else {
+                alert('Please upload a valid PDF file.');
+            }
+        });
+
+        function renderPage(pageNumber) {
+            pdf.getPage(pageNumber).then(page => {
+                const viewport = page.getViewport({ scale: 1 });
+                textLayerDiv.style.width = textLayerDiv.parentNode.offsetWidth + 'px';
+                textLayerDiv.style.height = 'auto'; // Let the text layer adjust height
+
+                page.getTextContent().then(textContent => {
+                    textLayerDiv.innerHTML = ''; // Clear previous text layer
+                    pdfjsLib.renderTextLayer({
+                        textContent,
+                        container: textLayerDiv,
+                        viewport,
+                        textDivs: []
+                    }).promise.then(() => {
+                        pageNumElem.textContent = pageNumber;
+                    });
+                });
+            });
+        }
+
+        prevPageBtn.addEventListener('click', () => {
+            if (pageNumber > 1) {
+                pageNumber--;
+                renderPage(pageNumber);
+            }
+        });
+
+        nextPageBtn.addEventListener('click', () => {
+            if (pageNumber < pdf.numPages) {
+                pageNumber++;
+                renderPage(pageNumber);
+            }
+        });
+    </script>
+</body>
+</html>

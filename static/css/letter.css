@@ -1,0 +1,49 @@
+body {
+    font-family: "Poppins", sans-serif;
+    color: #333333;
+    background-color: #ffffff; /* Adjust based on preference */
+    margin: 0;
+    padding: 0;
+    text-align: center; /* Adjust if necessary */
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.container {
+    margin-top: 50px;
+}
+
+.sound-icon {
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.letters {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+.letter {
+    font-size: 40px;
+    margin: 0 10px;
+    padding: 20px;
+    border: 2px solid #333;
+    border-radius: 10px;
+}
+
+.options {
+    margin: 20px 0;
+}
+
+button {
+    margin: 0 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+}
+
+.score {
+    font-size: 20px;
+    margin-top: 20px;
+}

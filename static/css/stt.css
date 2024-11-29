@@ -1,0 +1,171 @@
+h1{ 
+    color : white;
+    display: block;
+font-size: 2em;
+margin-block-start: 0.67em;
+margin-block-end: 0.67em;
+margin-inline-start: 0px;
+margin-inline-end: 0px;
+font-weight: bold;
+unicode-bidi: isolate;
+}
+
+body {
+    font-family: "Poppins", sans-serif;
+    color: #333333;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+
+.layout_padding {
+    padding: 80px 0;
+}
+
+.header_section{
+    text-align : center;
+}
+
+/* Heading Styles */
+.heading_container {
+    margin-bottom: 40px;
+}
+
+.heading_container h2 {
+    font-size: 36px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: #333333;
+}
+
+.heading_container h2 span {
+    color: #7335b7;
+}
+
+/* Hero Section */
+.hero_area {
+    height: 30vh;
+    min-height : 30vh;
+}
+
+
+/* Buttons */
+.btn1 {
+    display: inline-block;
+    padding: 12px 25px;
+    background-color: #f8842b;
+    color: #ffffff;
+    border-radius: 8px;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
+    margin: 15px 5px;
+}
+
+.btn1:hover {
+    background-color: #ff9f4d;
+    transform: translateY(-4px);
+}
+
+.choose-file-btn {
+    padding: 12px 25px;
+    background-color: #7335b7;
+    color: #ffffff;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    border: none;
+    transition: all 0.3s ease-in-out;
+    margin: 15px 5px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.choose-file-btn:hover {
+    background-color: #5a2a8f;
+    transform: translateY(-4px);
+}
+
+input[type="file"] {
+    display: none;
+}
+
+/* File Upload and Record Sections */
+.file-upload, .record-audio {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+textarea {
+    width: 100%;
+    padding: 20px;
+    border-radius: 10px;
+    border: 2px solid #ddd;
+    background-color: #ffffff;
+    color: #333333;
+    font-size: 16px;
+    resize: none;
+    margin: 0 auto;
+    display: block;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+    transition: border 0.3s ease-in-out;
+}
+
+textarea:focus {
+    outline: none;
+    border: 2px solid #f8842b;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Improved Layout and Padding */
+section.audio-to-text-container {
+    padding: 60px 15px;
+    background-color: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
+    margin: 0 auto;
+    max-width: 900px;
+}
+
+.file-upload, .record-audio {
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+    margin: 20px auto;
+    max-width: 600px;
+}
+
+.file-upload button, .record-audio button {
+    width: 100%;
+    max-width: 300px;
+    margin: 10px auto;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+    .hero_area {
+        height: auto;
+        padding: 50px 0;
+        text-align: center;
+        border-bottom-left-radius: 150px;
+    }
+
+    .heading_container h2 {
+        font-size: 28px;
+    }
+
+    textarea {
+        width: 90%;
+    }
+
+    .file-upload, .record-audio {
+        max-width: 90%;
+        padding: 10px;
+    }
+
+    .file-upload button, .record-audio button {
+        width: 100%;
+    }
+}

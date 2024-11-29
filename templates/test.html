@@ -1,0 +1,243 @@
+
+    <!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">    
+    {%load static%}
+    <link rel="stylesheet" href="{%static 'css/test.css'%}">
+
+    <!-- CSS -->
+    
+    <title>Quiz App using JavaScript - @code.scientist x @codingtorque</title>      
+   <style>
+    @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap");
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+}
+
+body {
+    height: 100vh;
+    background: #7335b7;
+    color: #0c0c0c;
+    overflow-x: hidden;
+}
+
+.layout_padding {
+    padding: 90px 0;
+}
+
+.layout_margin {
+    margin: 90px 0;
+}
+
+.start-screen,
+.score-container {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+button {
+    border: none;
+    outline: none;
+    cursor: pointer;
+}
+
+#start-button,
+#restart {
+    font-size: 1.3em;
+    padding: 0.5em 1.8em;
+    border-radius: 0.2em;
+    box-shadow: 0 20px 30px rgba(0, 0, 0, 0.4);
+}
+
+#restart {
+    margin-top: 0.9em;
+}
+
+#display-container {
+    background-color: #ffffff;
+    padding: 3.1em 1.8em;
+    width: 80%;
+    max-width: 37.5em;
+    margin: 0 auto;
+    position: absolute;
+    transform: translate(-50%, -50%);
+    top: 50%;
+    left: 50%;
+    border-radius: 0.6em;
+}
+
+.header {
+    margin-bottom: 1.8em;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 0.6em;
+    border-bottom: 0.1em solid #c0bfd2;
+}
+
+.timer-div {
+    background-color: #e1f5fe;
+    width: 7.5em;
+    border-radius: 1.8em;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.7em 1.8em;
+}
+
+.question {
+    margin-bottom: 1.25em;
+    font-weight: 600;
+}
+
+.option-div {
+    font-size: 0.9em;
+    width: 100%;
+    padding: 1em;
+    margin: 0.3em 0;
+    text-align: left;
+    outline: none;
+    background: transparent;
+    border: 1px solid #c0bfd2;
+    border-radius: 0.3em;
+}
+
+.option-div:disabled {
+    color: #000000;
+    cursor: not-allowed;
+}
+
+#next-button {
+    font-size: 1em;
+    margin-top: 1.5em;
+    background-color: #8754ff;
+    color: #ffffff;
+    padding: 0.7em 1.8em;
+    border-radius: 0.3em;
+    float: right;
+    box-shadow: 0px 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+.hide {
+    display: none;
+}
+
+.incorrect {
+    background-color: #ffdde0;
+    color: #d32f2f;
+    border-color: #d32f2f;
+}
+
+.correct {
+    background-color: #e7f6d5;
+    color: #689f38;
+    border-color: #689f38;
+}
+
+#user-score {
+    font-size: 1.5em;
+    color: #ffffff;
+}
+
+/* Additional styles to match homepage aesthetics */
+.heading_container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.heading_container h2 {
+    position: relative;
+    font-weight: bold;
+}
+
+.heading_container h2 span {
+    color: #7335b7;
+}
+
+.btn {
+    display: inline-block;
+    padding: 10px 25px;
+    background-color: #7335b7;
+    color: #ffffff;
+    border-radius: 5px;
+    transition: all 0.3s;
+}
+
+.btn:hover {
+    color: #ffffff;
+    transform: translateY(-3px);
+}
+
+.quote_btn-container {
+    display: flex;
+    align-items: center;
+}
+
+.quote_btn-container a {
+    color: #000000;
+    text-transform: uppercase;
+}
+
+.quote_btn-container .quote_btn {
+    display: inline-block;
+    padding: 5px 25px;
+    background-color: #f8842b;
+    color: #ffffff;
+    border-radius: 5px;
+    border: 1px solid #f8842b;
+}
+
+.quote_btn-container .quote_btn:hover {
+    color: #ffffff;
+    transform: translateY(-3px);
+}
+
+   </style>
+
+</head>
+
+<body>
+    <!-- Further code here -->
+    <div class="start-screen">
+        <button id="start-button">Start</button>
+    </div>
+    <div id="display-container">
+        <div class="header">
+            <div class="number-of-count">
+                <span class="number-of-question">1 of 3 questions</span>
+            </div>
+            <div class="timer-div">
+                <img src="https://uxwing.com/wp-content/themes/uxwing/download/time-and-date/stopwatch-icon.png"
+                    width="20px" />
+                <span class="time-left">30s</span>
+            </div>
+        </div>
+        <div id="container">
+            <!-- questions and options will be displayed here -->
+        </div>
+        <button id="next-button">Next</button>
+    </div>
+    <div class="score-container hide">
+        <div id="user-score">Demo Score</div>
+        <button id="restart">Restart</button>
+    </div>
+
+    <script src="{%static 'js/test.js'%}"></script>
+</body>
+
+</html>

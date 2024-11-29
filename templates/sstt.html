@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speech to Text Converter</title>
+    {% load static %}
+    {%load static%}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}" />
+
+    <!-- Font Awesome -->
+    <link href="{% static 'css/font-awesome.min.css' %}" rel="stylesheet" />
+
+    <!-- Custom styles for this template -->
+    <link href="{% static 'css/style.css' %}" rel="stylesheet" />
+
+    <!-- Responsive style -->
+    <link href="{% static 'css/responsive.css' %}" rel="stylesheet" />
+    <link href="{% static 'css/icon.css' %}" rel="stylesheet" />
+    <link href="{% static 'css/navb.css' %}" rel="stylesheet" />
+    <link rel="stylesheet" href="{% static 'css/stt.css' %}">
+    
+</head>
+<body>
+    <!-- Hero Section -->
+     <div class="navbar">
+        <nav class="navbar navbar-expand-lg custom_nav-container">
+            <a class="navbar-brand" href={% url 'home'%}>
+                <span style="display: flex; align-items: center;" class="icon-text-wrapper">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="32" height="32" style="vertical-align: middle;">
+                      <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+                      <path d="M160 96a96 96 0 1 1 192 0A96 96 0 1 1 160 96zm80 152l0 264-48.4-24.2c-20.9-10.4-43.5-17-66.8-19.3l-96-9.6C12.5 457.2 0 443.5 0 427L0 224c0-17.7 14.3-32 32-32l30.3 0c63.6 0 125.6 19.6 177.7 56zm32 264l0-264c52.1-36.4 114.1-56 177.7-56l30.3 0c17.7 0 32 14.3 32 32l0 203c0 16.4-12.5 30.2-28.8 31.8l-96 9.6c-23.2 2.3-45.9 8.9-66.8 19.3L272 512z"/>
+                  </svg>
+                  <span style="margin-left: 8px;">ReadEz</span>
+              </span>
+              
+              </a>
+    
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class=""> </span>
+            </button>
+    
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="{% url 'home' %}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'user-progress' %}">My Learning</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Settings</a>
+                        <div class="dropdown">
+                            <button id="toggleTheme">Toggle Theme</button>
+                            <button id="fontSelectButton">Change Font Style</button>
+                            <button id="fontSizeButton">Change Font Size</button>
+                            <button id="letterSpacingButton">Change letter distance</button>
+                            <div id="letterSpacingDialog" style="display: none;">
+                                <label for="letterSpacing">Letter Spacing:</label>
+                                <input type="number" id="letterSpacing" placeholder="e.g., 2" step="0.1">
+                                <button id="setSpacingButton">Set Spacing</button>
+                            </div>
+
+                        </div>
+                    </li>
+                </ul>
+                <div class="quote_btn-container">
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'logout' %}" class="quote_btn">Logout</a>
+                    {% else %}
+                        <a href="{% url 'login' %}" class="quote_btn">Login/Signup</a>
+                    {% endif %}
+                </div>
+            </div>
+        </nav>
+        
+    </div>
+    <div class="hero_area">
+        <header class="header_section">
+            <div class="container-fluid">
+                <h1>Speech to Text Converter</h1>            </div>
+        </header>
+    </div>
+
+    <!-- Audio to Text Converter Section -->
+    <section class="audio-to-text-container layout_padding">
+        <div class="heading_container heading_center">
+            <h2>Convert <span>Audio</span> to Text</h2>
+        </div>
+
+        <!-- File Upload Section -->
+        <div class="file-upload">
+            <form method="post" enctype="multipart/form-data" id="audioForm">
+                {% csrf_token %}
+                <label for="audioUpload" class="btn1 choose-file-btn">Choose Audio File</label>
+                <input type="file" id="audioUpload" name="audio" accept="audio/*" required>
+                <button type="submit" class="btn1">Convert to Text</button>
+            </form>
+        </div>
+
+        <!-- Record Audio Section -->
+        <div class="record-audio layout_padding">
+            <h3>Speech Recognition</h3>
+            <button id="startBtn" class="btn1">Start Speech Recognition</button>
+            <button id="stopBtn" class="btn1" disabled>Stop Speech Recognition</button>
+        
+            <h3>Transcribed Text:</h3>
+            <textarea id="transcriptionText" rows="10" readonly></textarea>
+        </div>
+    </section>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+        const startBtn = document.getElementById('startBtn');
+        const stopBtn = document.getElementById('stopBtn');
+        const transcriptionText = document.getElementById('transcriptionText');
+    
+        if (!('webkitSpeechRecognition' in window || 'SpeechRecognition' in window)) {
+            alert('Sorry, your browser does not support speech recognition.');
+            startBtn.disabled = true;
+            return;
+        }
+    
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        const recognition = new SpeechRecognition();
+    
+        recognition.continuous = false; 
+        recognition.interimResults = false; 
+        recognition.lang = 'en-US'; 
+    
+        recognition.onstart = function() {
+            startBtn.disabled = true;
+            stopBtn.disabled = false;
+            transcriptionText.value = "Listening...";
+        };
+    
+        recognition.onresult = function(event) {
+            let finalTranscript = '';
+    
+            
+            for (let i = event.resultIndex; i < event.results.length; i++) {
+                if (event.results[i].isFinal) {
+                    finalTranscript += event.results[i][0].transcript + ' ';
+                }
+            }
+    
+            
+            transcriptionText.value = finalTranscript;
+        };
+    
+        recognition.onerror = function(event) {
+            switch (event.error) {
+                case 'no-speech':
+                    transcriptionText.value = "No speech detected. Please try again.";
+                    break;
+                case 'audio-capture':
+                    transcriptionText.value = "No microphone found. Please check your microphone.";
+                    break;
+                case 'not-allowed':
+                    transcriptionText.value = "Permission to use microphone is denied.";
+                    break;
+                case 'service-not-allowed':
+                    transcriptionText.value = "Speech recognition service is not allowed.";
+                    break;
+                default:
+                    transcriptionText.value = `Error occurred in recognition: ${event.error}`;
+            }
+        };
+    
+        recognition.onend = function() {
+            startBtn.disabled = false;
+            stopBtn.disabled = true;
+            transcriptionText.value += " (Recognition ended)";
+        };
+    
+        // Start speech recognition
+        startBtn.addEventListener('click', () => {
+            recognition.start();
+        });
+    
+        // Stop speech recognition
+        stopBtn.addEventListener('click', () => {
+            recognition.stop();
+        });
+    });
+    
+    // Handle audio file submission
+    document.getElementById("audioForm").addEventListener("submit", function(e) {
+        e.preventDefault();
+        const formData = new FormData(this);
+        
+        fetch("{% url 'transcribe_audio' %}", {
+            method: "POST",
+            body: formData
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Network response was not ok");
+            }
+            return response.json();
+        })
+        .then(data => {
+            const transcriptionText = document.getElementById("transcriptionText");
+            if (data.transcription) {
+                transcriptionText.value = data.transcription;
+            } else {
+                transcriptionText.value = "Error: " + data.error;
+            }
+        })
+        .catch(error => {
+            console.error("There was a problem with the fetch operation:", error);
+            document.getElementById("transcriptionText").value = "Error: " + error.message;
+        });
+    });</script>
+    <script src="{% static 'js/settings.js' %}"></script>
+
+   
+</body>
+</html>

@@ -1,0 +1,70 @@
+body {
+    font-family: "Poppins", sans-serif;
+    line-height: 1;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+    background-color: White; /* Changed to white */
+    color: Black;
+  }
+  header {
+    width: 100%;
+    height: 100vh;
+  }
+  .card {
+    background-color: white;
+    border: none;
+    color: black;
+  }
+  .form-control {
+    background-color: white;
+    border-color: #E0FFFF;
+    color: black;
+  }
+
+  .btn-primary {
+    text-decoration: none;
+    color: white;
+    padding: 10px 20px;
+    background: #7335b7; /* Primary button color */
+    transition: 0.4s;
+    width : 100%;
+  }
+  .btn-primary:hover {
+    background: #5a2a8f; /* Hover color for the submit button */
+    border: 1px solid #5a2a8f;
+  }
+
+  .reg a {
+    text-decoration: none;
+    color: white;
+    padding: 10px 20px;
+    background: #f8842b; /* Register button color */
+    transition: 0.4s;
+  }
+  .reg a:hover {
+    background: #ff9f4d; /* Hover color for the register button */
+    border: 1px solid #ff9f4d;
+  }
+
+  nav {
+    width: 100%;
+    height: 100px;
+    color: #E0FFFF;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+  }
+  .logo {
+    font-size: 2em;
+    letter-spacing: 2px;
+  }
+  .menu a {
+    text-decoration: none;
+    color: black;
+    padding: 10px 20px;
+    position: relative;
+    font-size: 24px;
+  }

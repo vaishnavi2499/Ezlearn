@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learning Games</title>   
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    {% load static %}
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}" />
+    
+    <!-- Font awesome style -->
+    <link href="{% static 'css/font-awesome.min.css' %}" rel="stylesheet" />
+    
+    <!-- Custom styles for this template -->
+    <link href="{% static 'css/style.css' %}" rel="stylesheet" />
+    
+    <!-- Responsive style -->
+    <link href="{% static 'css/responsive.css' %}" rel="stylesheet" />  
+    <link href="{% static 'css/games.css' %}" rel="stylesheet" />
+    
+    
+</head>
+<body>
+    <div class="hero_area">
+        <!-- Header section starts -->
+        <header class="header_section">
+          <div class="container-fluid">
+            <nav class="navbar navbar-expand-lg custom_nav-container">
+              <a class="navbar-brand" href="index.html">
+                <span style="display: flex; align-items: center;" class="icon-text-wrapper">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="32" height="32">
+                      <path d="M160 96a96 96 0 1 1 192 0A96 96 0 1 1 160 96zm80 152l0 264-48.4-24.2c-20.9-10.4-43.5-17-66.8-19.3l-96-9.6C12.5 457.2 0 443.5 0 427L0 224c0-17.7 14.3-32 32-32l30.3 0c63.6 0 125.6 19.6 177.7 56zm32 264l0-264c52.1-36.4 114.1-56 177.7-56l30.3 0c17.7 0 32 14.3 32 32l0 203c0 16.4-12.5 30.2-28.8 31.8l-96 9.6c-23.2 2.3-45.9 8.9-66.8 19.3L272 512z"/>
+                  </svg>
+                  <span style="margin-left: 8px;">ReadEz</span>
+              </span>
+              </a>
+              <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent">
+                <span></span>
+              </button>
+              <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav">
+                  <li class="nav-item">
+                    <a class="nav-link" href="{% url 'home' %}">Home</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="{% url 'user-progress' %}">My Learning</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">Settings</a>
+                    <div class="dropdown">
+                      <button id="toggleTheme">Toggle Theme</button>
+                      <button id="fontSelectButton">Change Font Style</button>
+                      <button id="fontSizeButton">Change Font Size</button>
+                      <button id="letterSpacingButton">Change letter distance</button>
+                            <div id="letterSpacingDialog" style="display: none;">
+                                <label for="letterSpacing">Letter Spacing:</label>
+                                <input type="number" id="letterSpacing" placeholder="e.g., 2" step="0.1">
+                                <button id="setSpacingButton">Set Spacing</button>
+                            </div>
+                  </div>
+                  </li>
+                </ul>
+                <div class="quote_btn-container">
+                    {% if user.is_authenticated %}
+                    <!-- Show Update Profile button if user is logged in -->
+                    <a href="{% url 'logout' %}" class="quote_btn">
+                        Logout
+                    </a>
+                {% else %}
+                    <!-- Show Login/Signup button if user is not logged in -->
+                    <a href="{% url 'login' %}" class="quote_btn">
+                        Login/Signup
+                    </a>
+                {% endif %}
+                </div>
+              </div>
+            </nav>
+          </div>
+        </header>
+  
+    <h1>Choose A Learning Game</h1>
+
+    </div>
+
+
+    <!-- Buttons Section -->
+    <div class="container">
+        <div class="card">
+            <img src="{%static 'images22/matching.png'%}" alt="Letter and Sound Matching" class="card-image">
+            <button class="game-btn" onclick="window.location.href='{% url 'lsm' %}'">Letter and Sound Matching</button>
+        </div>
+        <div class="card">
+            <img src="{%static 'images22/imageword.png'%}" alt="Image Words" class="card-image">
+            <button class="game-btn" onclick="window.location.href='{% url 'imageWo' %}'">Image Words</button>
+        </div>
+        <div class="card">
+            <img src="{%static 'images22/lyrics.png'%}" alt="Rhyming Words" class="card-image">
+            <button class="game-btn" onclick="window.location.href='{% url 'rhyme' %}'">Rhyming Words</button>
+        </div>
+        <div class="card">
+            <img src="{%static 'images22/bingo.png'%}" alt="Number Matching Game" class="card-image">
+            <button class="game-btn" onclick="window.location.href='{% url 'numatch' %}'">Number Matching Game</button>
+        </div>
+        <div class="card">
+            <img src="{%static 'images22/maths.png'%}" alt="Lets learn Math!" class="card-image">
+            <button class="game-btn" onclick="window.location.href='{% url 'math' %}'">Lets learn Math!</button>
+        </div>
+        <div class="card">
+            <img src="{%static 'images22/flash-card.png'%}" alt="Flash cards" class="card-image">
+            <button class="game-btn" onclick="window.location.href='{% url 'flc' %}'">Flash cards</button>
+        </div>
+    </div>
+    <script src="{%static 'js/settings.js'%}"></script>
+</body>
+</html>

@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Whiteboard for Dyslexia Project</title>
+    <style>
+        body {
+            font-family: "Poppins", sans-serif;
+            color: #333333;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        .layout_padding {
+            padding: 80px 0;
+        }
+
+        .heading_container {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .heading_container h1 span {
+            color: #7335b7;
+        }
+        h1{ 
+            color : white;
+            font-size: 2em;
+            font-weight: bold;
+        }
+
+        .hero_area {
+            position: relative;
+            height: 30vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #5a2a8f, #7335b7);
+            color: white;
+            border-bottom-left-radius: 250px;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .toolbar {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        button, input {
+            margin: 5px;
+            padding: 10px 15px;
+            cursor: pointer;
+            border: 2px solid #5a2a8f;
+            border-radius: 5px;
+            background-color: #ffffff;
+            color: #5a2a8f;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        button:hover {
+            background-color: #5a2a8f;
+            color: #ffffff;
+        }
+
+        canvas {
+            border: 2px solid #5a2a8f;
+            background-color: #ffffff;
+            width:100%;
+            height: 800px;
+            margin-top: 10px;
+            border-radius: 5px;
+            cursor: crosshair;
+        }
+
+        /* Media queries for responsiveness */
+        @media (max-width: 600px) {
+            canvas {
+                width: 100%;
+                height: 400px;
+            }
+
+            button, input {
+                padding: 8px;
+                font-size: 14px;
+            }
+
+            .heading_container h1 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="hero_area">
+        <div class="heading_container">
+            <h1>Use Whiteboard!</h1>
+        </div>
+    </div>
+    
+    <div class="layout_padding">
+        <div class="toolbar">
+            <button id="draw">Draw</button>
+            <button id="rectangle">Rectangle</button>
+            <button id="circle">Circle</button>
+            <button id="eraser">Eraser</button> <!-- Eraser button added -->
+            <label for="colorPicker">Color:</label>
+            <input type="color" id="colorPicker">
+            <label for="brushSize">Size:</label>
+            <input type="range" id="brushSize" min="1" max="10" value="2">
+            <button id="clearCanvas">Clear</button>
+        </div>
+        
+        <canvas id="whiteboard"></canvas>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('whiteboard');
+        const ctx = canvas.getContext('2d');
+        canvas.width = 800;
+        canvas.height = 600;
+
+        let isDrawing = false;
+        let startX, startY;
+        let tool = 'draw'; // Default tool
+        let strokeColor = '#000000'; // Default stroke color
+        let lineWidth = 2;
+
+        const colorPicker = document.getElementById('colorPicker');
+        const brushSize = document.getElementById('brushSize');
+
+        colorPicker.addEventListener('change', (e) => strokeColor = e.target.value);
+        brushSize.addEventListener('change', (e) => lineWidth = e.target.value);
+
+        document.getElementById('draw').addEventListener('click', () => setTool('draw'));
+        document.getElementById('rectangle').addEventListener('click', () => setTool('rectangle'));
+        document.getElementById('circle').addEventListener('click', () => setTool('circle'));
+        document.getElementById('eraser').addEventListener('click', () => setTool('eraser')); // Eraser tool
+        document.getElementById('clearCanvas').addEventListener('click', clearCanvas);
+
+        canvas.addEventListener('mousedown', startDrawing);
+        canvas.addEventListener('mousemove', draw);
+        canvas.addEventListener('mouseup', stopDrawing);
+        canvas.addEventListener('mouseout', stopDrawing);
+
+        function setTool(selectedTool) {
+            tool = selectedTool;
+            if (tool === 'eraser') {
+                canvas.style.cursor = 'cell'; // Change cursor for eraser
+            } else if (tool === 'rectangle') {
+                canvas.style.cursor = 'crosshair';
+            } else if (tool === 'circle') {
+                canvas.style.cursor = 'pointer'; // Example cursor for circle
+            } else {
+                canvas.style.cursor = 'crosshair'; // Default cursor for drawing
+            }
+        }
+
+        function startDrawing(e) {
+            isDrawing = true;
+            startX = e.offsetX;
+            startY = e.offsetY;
+            ctx.strokeStyle = strokeColor;
+            ctx.lineWidth = lineWidth;
+            ctx.beginPath();
+            if (tool === 'draw') {
+                ctx.moveTo(startX, startY);
+            }
+        }
+
+        function draw(e) {
+            if (!isDrawing) return;
+            
+            if (tool === 'draw') {
+                ctx.lineTo(e.offsetX, e.offsetY);
+                ctx.stroke();
+            } else if (tool === 'eraser') {
+                ctx.strokeStyle = '#ffffff'; // Eraser matches canvas background color
+                ctx.lineTo(e.offsetX, e.offsetY);
+                ctx.stroke();
+            }
+        }
+
+        function stopDrawing(e) {
+            if (!isDrawing) return;
+            isDrawing = false;
+            
+            if (tool === 'rectangle') {
+                drawRectangle(e.offsetX, e.offsetY);
+            } else if (tool === 'circle') {
+                drawCircle(e.offsetX, e.offsetY);
+            }
+        }
+
+        function drawRectangle(endX, endY) {
+            const width = endX - startX;
+            const height = endY - startY;
+            ctx.strokeRect(startX, startY, width, height);
+        }
+
+        function drawCircle(endX, endY) {
+            const radius = Math.sqrt(Math.pow(endX - startX, 2) + Math.pow(endY - startY, 2));
+            ctx.beginPath();
+            ctx.arc(startX, startY, radius, 0, Math.PI * 2);
+            ctx.stroke();
+        }
+
+        function clearCanvas() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+    </script>
+</body>
+</html>

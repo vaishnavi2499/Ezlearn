@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Viewer</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        canvas {
+            border: 1px solid #ccc;
+            margin-top: 20px;
+            cursor: crosshair;
+        }
+        button {
+            margin: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Upload and View PDF</h1>
+    <input type="file" id="fileInput" accept="application/pdf" />
+    <button id="uploadBtn">Upload PDF</button>
+    <button onclick="zoomIn()">Zoom In</button>
+    <button onclick="zoomOut()">Zoom Out</button>
+    <canvas id="pdfCanvas"></canvas>
+
+    <script>
+        const uploadBtn = document.getElementById('uploadBtn');
+        const fileInput = document.getElementById('fileInput');
+        const pdfCanvas = document.getElementById('pdfCanvas');
+        const pdfCtx = pdfCanvas.getContext('2d');
+
+        let pdf = null;
+        let scale = 1; // Initial zoom scale
+        let isHighlighting = false;
+        let startX, startY;
+
+        uploadBtn.addEventListener('click', () => {
+            const file = fileInput.files[0];
+            if (file && file.type === 'application/pdf') {
+                const fileReader = new FileReader();
+                fileReader.onload = function(event) {
+                    const pdfData = new Uint8Array(event.target.result);
+                    pdfjsLib.getDocument(pdfData).promise.then(doc => {
+                        pdf = doc;
+                        renderPage(1);
+                    });
+                };
+                fileReader.readAsArrayBuffer(file);
+            } else {
+                alert('Please upload a valid PDF file.');
+            }
+        });
+
+        function renderPage(pageNumber) {
+            pdf.getPage(pageNumber).then(page => {
+                const viewport = page.getViewport({ scale });
+                pdfCanvas.width = viewport.width;
+                pdfCanvas.height = viewport.height;
+
+                const renderContext = {
+                    canvasContext: pdfCtx,
+                    viewport: viewport
+                };
+                page.render(renderContext);
+            });
+        }
+
+        function zoomIn() {
+            scale += 0.1; // Increase the scale
+            renderPage(1); // Re-render the first page with the new scale
+        }
+
+        function zoomOut() {
+            scale = Math.max(0.1, scale - 0.1); // Decrease the scale, ensuring it's at least 0.1
+            renderPage(1); // Re-render the first page with the new scale
+        }
+
+        pdfCanvas.addEventListener('mousedown', (event) => {
+            isHighlighting = true;
+            startX = event.offsetX;
+            startY = event.offsetY;
+        });
+
+        pdfCanvas.addEventListener('mousemove', (event) => {
+            if (isHighlighting) {
+                const x = event.offsetX;
+                const y = event.offsetY;
+
+                pdfCtx.clearRect(0, 0, pdfCanvas.width, pdfCanvas.height); // Clear the canvas
+                renderPage(1); // Re-render the page
+                pdfCtx.fillStyle = 'rgba(255, 255, 0, 0.5)'; // Highlight color
+                pdfCtx.fillRect(startX, startY, x - startX, y - startY); // Draw highlight
+            }
+        });
+
+        pdfCanvas.addEventListener('mouseup', () => {
+            isHighlighting = false;
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,20 @@
+.icon-text-wrapper {
+    display: flex;
+    align-items: center;
+}
+.icon-text-wrapper svg {
+    vertical-align: middle;
+    transition: transform 0.3s ease, fill 0.3s ease;
+    cursor: pointer; /* Change cursor to indicate it's clickable */
+}
+.icon-text-wrapper .text {
+    margin-left: 8px; /* Space between icon and text */
+}
+.icon-text-wrapper svg:hover {
+    transform: scale(1.1); /* Slightly scale up the SVG on hover */
+    fill: #ff5722; /* Change color on hover */
+}
+.icon-text-wrapper svg.clicked {
+    transform: scale(1.2); /* Scale up more on click */
+    fill: #ff5722; /* Change color on click */
+}

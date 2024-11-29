@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Welcome Welcome Welcome</h1>
+  
+   
+    
+   {% if user.is_authenticated %}  
+   <button onclick="window.location.href='{% url 'tts' %}'">Text to Speech</button>
+   <button onclick="window.location.href='{% url 'stt' %}'">Speech to text</button>
+   <button onclick="window.location.href='{% url 'games' %}'">Activities</button>
+   <button onclick="window.location.href='{% url 'logout' %}'">Logout</button>  
+   <button onclick="window.location.href='{% url 'update' %}'">Profile</button>    
+   <h1>HELLO  {{ username }}</h1> 
+   {%else%} 
+   <button onclick="window.location.href='{% url 'login' %}'">Login</button>
+   <button onclick="window.location.href='{% url 'register' %}'">Register</button>
+   {%endif%}
+
+</body>
+</html>

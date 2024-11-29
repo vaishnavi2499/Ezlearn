@@ -1,0 +1,67 @@
+/* Reset default styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f7f7fb;
+    overflow: hidden;
+  }
+  
+  /* Violet Hero Section */
+  .hero_area {
+    background-color: #7335b7;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 0 0 350px 0;
+  }
+  
+  .container {
+    background-color: #fff;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 350px;
+  }
+  
+  .title {
+    font-size: 28px;
+    color: #4a148c;
+    margin-bottom: 30px;
+    font-weight: 600;
+  }
+  
+  .button-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .btn {
+    background-color: #6a1b9a;
+    color: #fff;
+    border: none;
+    padding: 12px 20px;
+    font-size: 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    width: 100%;
+    font-weight: 600;
+  }
+  
+  .btn:hover {
+    background-color: #4a148c;
+    transform: translateY(-3px);
+  }
+  
+  .btn:active {
+    transform: translateY(1px);
+  }
+  

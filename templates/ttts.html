@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text to Speech Converter</title>
+    {%load static%}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}" />
+
+    <!-- Font Awesome -->
+    <link href="{% static 'css/font-awesome.min.css' %}" rel="stylesheet" />
+
+    <!-- Custom styles for this template -->
+    <link href="{% static 'css/style.css' %}" rel="stylesheet" />
+
+    <!-- Responsive style -->
+    <link href="{% static 'css/responsive.css' %}" rel="stylesheet" />
+    <link href="{% static 'css/icon.css' %}" rel="stylesheet" />
+    <link href="{% static 'css/navb.css' %}" rel="stylesheet" />
+    <link href="{% static 'css/tts.css' %}" rel="stylesheet" />
+<style>
+    audio {
+        width: 500px; /* Increased width */
+        height: 80px; /* Increased height */
+        background-color: #f0f0f0; /* Light gray background for better visibility */
+        border-radius: 10px; /* Rounded corners */
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+      }
+    
+      /* Customizing the play button in WebKit browsers */
+      audio::-webkit-media-controls-play-button {
+        background-color: #7335b7; /* Purple background for the play button */
+        border-radius: 50%; /* Make it circular */
+      }
+    
+      /* Play button customization */
+      audio::-webkit-media-controls-play-button::before {
+        content: '▶'; /* Play triangle */
+        color: white; /* White triangle */
+        font-size: 36px; /* Adjust size as needed */
+        line-height: 80px; /* Center the triangle vertically */
+      }
+    
+      /* Customize other controls */
+      audio::-webkit-media-controls-panel {
+        background-color: #f0f0f0; /* Light gray for the control panel */
+      }
+    
+      /* Making other control buttons white */
+      audio::-webkit-media-controls-volume-slider,
+      audio::-webkit-media-controls-timeline {
+        filter: invert(1); /* Invert color for better visibility */
+      }
+</style>
+    
+</head>
+
+<body>
+    <div class="navbar">
+        <nav class="navbar navbar-expand-lg custom_nav-container">
+            <a class="navbar-brand" href={% url 'home'%}>
+                <span style="display: flex; align-items: center;" class="icon-text-wrapper">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="32" height="32" style="vertical-align: middle;">
+                      <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+                      <path d="M160 96a96 96 0 1 1 192 0A96 96 0 1 1 160 96zm80 152l0 264-48.4-24.2c-20.9-10.4-43.5-17-66.8-19.3l-96-9.6C12.5 457.2 0 443.5 0 427L0 224c0-17.7 14.3-32 32-32l30.3 0c63.6 0 125.6 19.6 177.7 56zm32 264l0-264c52.1-36.4 114.1-56 177.7-56l30.3 0c17.7 0 32 14.3 32 32l0 203c0 16.4-12.5 30.2-28.8 31.8l-96 9.6c-23.2 2.3-45.9 8.9-66.8 19.3L272 512z"/>
+                  </svg>
+                  <span style="margin-left: 8px;">ReadEz</span>
+              </span>
+              
+              </a>
+    
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class=""> </span>
+            </button>
+    
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="{% url 'home' %}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'user-progress' %}">My Learning</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Settings</a>
+                        <div class="dropdown">
+                            <button id="toggleTheme">Toggle Theme</button>
+                            <button id="fontSelectButton">Change Font Style</button>
+                            <button id="fontSizeButton">Change Font Size</button>
+                            <button id="letterSpacingButton">Change letter distance</button>
+                            <div id="letterSpacingDialog" style="display: none;">
+                                <label for="letterSpacing">Letter Spacing:</label>
+                                <input type="number" id="letterSpacing" placeholder="e.g., 2" step="0.1">
+                                <button id="setSpacingButton">Set Spacing</button>
+                            </div>
+
+                        </div>
+                    </li>
+                </ul>
+                <div class="quote_btn-container">
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'logout' %}" class="quote_btn">Logout</a>
+                    {% else %}
+                        <a href="{% url 'login' %}" class="quote_btn">Login/Signup</a>
+                    {% endif %}
+                </div>
+            </div>
+        </nav>
+    </div>
+    <div class="hero_area">
+        <h1>Text to Speech </h1>
+    </div>
+
+    <form method="post" id="ttsForm" enctype="multipart/form-data">
+        <!-- Textbox for manual input -->
+        <label for="text">Enter Text:</label>
+        <textarea id="text" name="text" placeholder="Type your text here..."></textarea>
+
+        <!-- File upload for PDF -->
+        <div class="file-upload-wrapper">
+            <label for="pdfUpload" class="file-upload-label">Upload PDF:</label>
+            <button class="choose-file-btn file-upload-btn">Choose File</button>
+            <input type="file" id="pdfUpload" name="pdf" accept="application/pdf">
+        </div>
+
+        <!-- File upload for Image -->
+        <div class="file-upload-wrapper">
+            <label for="imageUpload" class="file-upload-label">Upload Image:</label>
+            <button class="choose-file-btn file-upload-btn">Choose File</button>
+            <input type="file" id="imageUpload" name="image" accept="image/*">
+        </div>
+
+        <!-- Submit button -->
+        <button class="btn1" type="submit">Generate Audio</button>
+    </form>
+
+    <!-- Audio player for output -->
+    <audio id="audioPlayer" controls>
+        <source id="audioSource" type="audio/mp3">
+        Your browser does not support the audio element.
+    </audio>
+
+    <script>
+        document.querySelectorAll('.choose-file-btn').forEach((button, index) => {
+            button.addEventListener('click', function (e) {
+                e.preventDefault();
+                const input = document.querySelectorAll('input[type="file"]')[index];
+                input.click();
+            });
+        });
+
+        document.getElementById("ttsForm").addEventListener("submit", function (e) {
+            e.preventDefault(); // Prevent form from reloading the page
+
+            // Prepare form data
+            const formData = new FormData();
+            const textInput = document.getElementById("text").value;
+            const pdfFile = document.getElementById("pdfUpload").files[0];
+            const imageFile = document.getElementById("imageUpload").files[0];
+
+            formData.append("text", textInput); // Textbox input
+            if (pdfFile) formData.append("pdf", pdfFile); // PDF file
+            if (imageFile) formData.append("image", imageFile); // Image file
+
+            // Send the data to the Django backend
+            fetch("{% url 'tts' %}", {
+                method: "POST",
+                body: formData,
+                headers: {
+                    "X-CSRFToken": "{{ csrf_token }}"
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.audio_url) {
+                        const audioPlayer = document.getElementById("audioPlayer");
+                        const audioSource = document.getElementById("audioSource");
+                        audioSource.src = data.audio_url; // Set the source to the audio URL returned from the server
+                        audioPlayer.style.display = "block"; // Show the audio player
+                        audioPlayer.load(); // Load the new audio
+                        audioPlayer.play(); // Automatically play the audio
+                    } else {
+                        alert("Error: " + data.error);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert("An error occurred while generating the audio. Please try again.");
+                });
+        });
+    </script>
+    <script src="{% static 'js/settings.js' %}"></script>
+
+</body>
+
+</html>
+

@@ -1,0 +1,71 @@
+body {
+    font-family:"Poppins", sans-serif;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f0f0f0;
+}
+
+.container {
+    text-align: center;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.game-board {
+    display: grid;
+    grid-template-columns: repeat(4, 100px);
+    grid-gap: 10px;
+    margin: 20px auto;
+}
+
+
+
+.card.flipped {
+    background-color: #fff;
+    color: white;
+    
+}
+
+#resetButton {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+}
+
+
+
+.card {
+    position: relative; /* Positioning for overlay */
+
+    width: 100px;
+    height: 100px;
+    background-color: #7335b7;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.card img {
+    width: 100%; /* Make the image fit the card */
+    height: 100%; /* Make the image fit the card */
+    object-fit: cover; /* Keep aspect ratio */
+    display: none; /* Initially hidden */
+}
+
+.overlay {
+    position: absolute; /* Position the overlay */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* Center the overlay */
+    color: white; /* Overlay text color */
+    font-size: 24px; /* Adjust size */
+    pointer-events: none; /* Prevent mouse events */
+}

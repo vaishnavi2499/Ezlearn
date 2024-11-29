@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dyslexia Simulator</title>
+    {%load static%}
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">  
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}" />
+    
+        <!-- Font Awesome -->
+        <link href="{% static 'css/font-awesome.min.css' %}" rel="stylesheet" />
+    
+        <!-- Custom styles for this template -->
+        <link href="{% static 'css/style.css' %}" rel="stylesheet" />
+    
+        <!-- Responsive style -->
+        <link href="{% static 'css/responsive.css' %}" rel="stylesheet" />
+        <link href="{% static 'css/icon.css' %}" rel="stylesheet" />
+        <link href="{% static 'css/navb.css' %}" rel="stylesheet" />
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        h1 {
+            text-align: center;
+            color: #5a2a8f;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        blockquote {
+            background-color: #e0f7fa; /* Light blue background for quotes */
+            padding: 15px;
+            border-left: 5px solid #5a2a8f;
+            margin: 20px 0;
+        }
+
+        #toggleButton {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background-color: #5a2a8f;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        #toggleButton:hover {
+            background-color: #7335b7;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <nav class="navbar navbar-expand-lg custom_nav-container">
+            <a class="navbar-brand" href={% url 'home'%}>
+                <span style="display: flex; align-items: center;" class="icon-text-wrapper">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="32" height="32" style="vertical-align: middle;">
+                      <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+                      <path d="M160 96a96 96 0 1 1 192 0A96 96 0 1 1 160 96zm80 152l0 264-48.4-24.2c-20.9-10.4-43.5-17-66.8-19.3l-96-9.6C12.5 457.2 0 443.5 0 427L0 224c0-17.7 14.3-32 32-32l30.3 0c63.6 0 125.6 19.6 177.7 56zm32 264l0-264c52.1-36.4 114.1-56 177.7-56l30.3 0c17.7 0 32 14.3 32 32l0 203c0 16.4-12.5 30.2-28.8 31.8l-96 9.6c-23.2 2.3-45.9 8.9-66.8 19.3L272 512z"/>
+                  </svg>
+                  <span style="margin-left: 8px;">ReadEz</span>
+              </span>
+              
+              </a>
+    
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class=""> </span>
+            </button>
+    
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav">
+                    <li class="nav-item ">
+                        <a class="nav-link" href="{% url 'home' %}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'user-progress' %}">My Learning</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Settings</a>
+                        <div class="dropdown">
+                            <button id="toggleTheme">Toggle Theme</button>
+                            <button id="fontSelectButton">Change Font Style</button>
+                            <button id="fontSizeButton">Change Font Size</button>
+                            <button id="letterSpacingButton">Change letter distance</button>
+                            <div id="letterSpacingDialog" style="display: none;">
+                                <label for="letterSpacing">Letter Spacing:</label>
+                                <input type="number" id="letterSpacing" placeholder="e.g., 2" step="0.1">
+                                <button id="setSpacingButton">Set Spacing</button>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+                <div class="quote_btn-container">
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'logout' %}" class="quote_btn">Logout</a>
+                    {% else %}
+                        <a href="{% url 'login' %}" class="quote_btn">Login</a>
+                    {% endif %}
+                </div>
+            </div>
+        </nav>
+    </div>
+      
+           
+    
+<div class="container">
+    <h1>Dyslexia Simulator</h1>
+    <button id="toggleButton">Start Simulation</button>
+
+    <div id="textContent">
+        <p>Friends who have dyslexia described to me how they experience reading. She <em>can</em> read, but it takes a lot of concentration, and the letters seem to "jump around".</p>
+
+        <p>I remembered reading about <a href="https://en.wikipedia.org/wiki/Typoglycemia">typoglycemia.</a> Wouldn't it be possible to do it interactively on a website with JavaScript? Sure it would.</p>
+
+        <blockquote>
+            <p>Dyslexia is characterized by difficulty with learning to read fluently and with accurate comprehension despite normal intelligence. This includes difficulty with phonological awareness, phonological decoding, processing speed, orthographic coding, auditory short-term memory, language skills/verbal comprehension, and/or rapid naming.</p>
+            <p>Developmental reading disorder (DRD) is the most common learning disability. Dyslexia is the most recognized of reading disorders; however, not all reading disorders are linked to dyslexia.</p>
+            <p>Some see dyslexia as distinct from reading difficulties resulting from other causes, such as a non-neurological deficiency with vision or hearing, or poor or inadequate reading instruction. There are three proposed cognitive subtypes of dyslexia (auditory, visual, and attentional), although individual cases of dyslexia are better explained by specific underlying neuropsychological deficits and co-occurring learning disabilities (e.g., attention-deficit/hyperactivity disorder, math disability, etc.). Although it is considered to be a receptive language-based learning disability in the research literature, dyslexia also affects one's expressive language skills. Researchers at MIT found that people with dyslexia exhibited impaired voice-recognition abilities.</p>
+        </blockquote>
+
+        <p><em>Source: <a href="http://en.wikipedia.org/wiki/Dyslexia">Wikipedia</a></em></p>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+let simulationInterval;
+let isSimulationActive = false;
+
+$(function() {
+    var getTextNodesIn = function(el) {
+        return $(el).find(":not(iframe,script)").addBack().contents().filter(function() {
+            return this.nodeType == 3; // Text node types are type 3
+        });
+    };
+
+    var textNodes = getTextNodesIn($("#textContent"));
+
+    var wordsInTextNodes = [];
+    for (var i = 0; i < textNodes.length; i++) {
+        var node = textNodes[i];
+        var words = [];
+        var re = /\w+/g;
+        var match;
+        while ((match = re.exec(node.nodeValue)) != null) {
+            var word = match[0];
+            var position = match.index;
+            words.push({
+                length: word.length,
+                position: position
+            });
+        }
+        wordsInTextNodes[i] = words;
+    };
+
+    function messUpWords() {
+        for (var i = 0; i < textNodes.length; i++) {
+            var node = textNodes[i];
+            for (var j = 0; j < wordsInTextNodes[i].length; j++) {
+                if (Math.random() > 1 / 10) {
+                    continue;
+                }
+                var wordMeta = wordsInTextNodes[i][j];
+                var word = node.nodeValue.slice(wordMeta.position, wordMeta.position + wordMeta.length);
+                var before = node.nodeValue.slice(0, wordMeta.position);
+                var after = node.nodeValue.slice(wordMeta.position + wordMeta.length);
+                node.nodeValue = before + messUpWord(word) + after;
+            }
+        }
+    }
+
+    function messUpWord(word) {
+        if (word.length < 3) {
+            return word;
+        }
+        return word[0] + messUpMessyPart(word.slice(1, -1)) + word[word.length - 1];
+    }
+
+    function messUpMessyPart(messyPart) {
+        if (messyPart.length < 2) {
+            return messyPart;
+        }
+        var a, b;
+        while (!(a < b)) {
+            a = getRandomInt(0, messyPart.length - 1);
+            b = getRandomInt(0, messyPart.length - 1);
+        }
+        return messyPart.slice(0, a) + messyPart[b] + messyPart.slice(a + 1, b) + messyPart[a] + messyPart.slice(b + 1);
+    }
+
+    function getRandomInt(min, max) {
+        return Math.floor(Math.random() * (max - min + 1) + min);
+    }
+
+    $("#toggleButton").click(function() {
+        if (isSimulationActive) {
+            clearInterval(simulationInterval);
+            $(this).text("Start Simulation");
+        } else {
+            simulationInterval = setInterval(messUpWords, 50);
+            $(this).text("Stop Simulation");
+        }
+        isSimulationActive = !isSimulationActive;
+    });
+});
+</script>
+<script src="{% static 'js/settings.js' %}"></script>
+
+
+</body>
+</html>

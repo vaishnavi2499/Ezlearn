@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Word Formation Game</title>
+    {% load static %}
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}" />
+
+    <!-- Font Awesome -->
+    <link href="{% static 'css/font-awesome.min.css' %}" rel="stylesheet" />
+
+    <!-- Custom styles for this template -->
+    <link href="{% static 'css/style.css' %}" rel="stylesheet" />
+
+    <!-- Responsive style -->
+    <link href="{% static 'css/responsive.css' %}" rel="stylesheet" />
+    <link href="{% static 'css/icon.css' %}" rel="stylesheet" />
+    <link href="{% static 'css/navb.css' %}" rel="stylesheet" />
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            text-align: center;
+        }
+
+        .container {
+            margin-top: 50px;
+        }
+
+        .letters {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .letter {
+            font-size: 40px;
+            margin: 0 10px;
+            padding: 20px;
+            border: 2px solid #333;
+            border-radius: 10px;
+            cursor: pointer;
+            user-select: none;
+            transition: background-color 0.3s;
+        }
+
+        .letter.dragging {
+            opacity: 0.5;
+        }
+
+        .letter.over {
+            background-color: #ddd;
+        }
+
+        .image {
+            margin: 20px 0;
+            width: 200px;
+            height: auto;
+            display: inline-block;  
+            background-color: white;
+        }
+
+        .button {
+            padding: 10px 20px;
+            font-size: 16px;
+            margin-top: 20px;
+            cursor: pointer;
+        }
+
+        .feedback {
+            font-size: 20px;
+            margin-top: 20px;
+            color: green;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <nav class="navbar navbar-expand-lg custom_nav-container">
+            <a class="navbar-brand" href={% url 'home'%}>
+                <span style="display: flex; align-items: center;" class="icon-text-wrapper">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="32" height="32" style="vertical-align: middle;">
+                      <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+                      <path d="M160 96a96 96 0 1 1 192 0A96 96 0 1 1 160 96zm80 152l0 264-48.4-24.2c-20.9-10.4-43.5-17-66.8-19.3l-96-9.6C12.5 457.2 0 443.5 0 427L0 224c0-17.7 14.3-32 32-32l30.3 0c63.6 0 125.6 19.6 177.7 56zm32 264l0-264c52.1-36.4 114.1-56 177.7-56l30.3 0c17.7 0 32 14.3 32 32l0 203c0 16.4-12.5 30.2-28.8 31.8l-96 9.6c-23.2 2.3-45.9 8.9-66.8 19.3L272 512z"/>
+                  </svg>
+                  <span style="margin-left: 8px;">ReadEz</span>
+              </span>
+              
+              </a>
+    
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class=""> </span>
+            </button>
+    
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav">
+                    <li class="nav-item ">
+                        <a class="nav-link" href="{% url 'home' %}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'user-progress' %}">My Learning</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Settings</a>
+                        <div class="dropdown">
+                            <button id="toggleTheme">Toggle Theme</button>
+                            <button id="fontSelectButton">Change Font Style</button>
+                            <button id="fontSizeButton">Change Font Size</button>
+                            <button id="letterSpacingButton">Change letter distance</button>
+                            <div id="letterSpacingDialog" style="display: none;">
+                                <label for="letterSpacing">Letter Spacing:</label>
+                                <input type="number" id="letterSpacing" placeholder="e.g., 2" step="0.1">
+                                <button id="setSpacingButton">Set Spacing</button>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+                <div class="quote_btn-container">
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'logout' %}" class="quote_btn">Logout</a>
+                    {% else %}
+                        <a href="{% url 'login' %}" class="quote_btn">Login/Signup</a>
+                    {% endif %}
+                </div>
+            </div>
+        </nav>
+    </div>
+    <div class="container">
+        <h1>Word Formation Game</h1>
+        <div>
+            <button id="chan" onClick="change()">Start</button>
+            <div id="score">
+                Score: <span id="scoreDisplay">0</span> <!-- Added score display -->
+            </div>
+        </div>
+        <div id="img">
+            <img id="imgElement" src="{% static 'images/default (2).png' %}" alt="Word Image" class="image">
+        </div>
+        <div class="letters" id="lettersContainer"></div>
+        <div class="feedback" id="feedback"></div>
+        <button class="button" onclick="checkWord()">Check</button>
+    </div>
+
+    <script>
+        let score = 0;
+        let gameActive = false;  
+        const words = [
+            "ball", "bottle", "drum", "table", "doll", "bread",
+            "bucket", "chair", "bed", "keyboard", "desktop", "bowl",
+            "card", "desk", "pillow", "board", "book", "phone",
+            "lamp", "basket", "cup", "drone", "block", "window"
+        ];  
+
+        let currentWord = "";
+
+        function change() {      
+            if (!gameActive) {
+                score = 0;  
+                document.getElementById("scoreDisplay").innerText = score; // Update the score display
+                document.getElementById('feedback').innerText = ""; // Clear feedback
+                const n = document.getElementById("chan");
+                n.innerText = "End";
+                n.setAttribute('onclick', 'atEnd()');
+                gameActive = true;
+                nextWord(); // Start the first word
+            } else {
+                atEnd(); // End the game if it's currently active
+            }
+        }
+
+        function atEnd() {
+            document.getElementById('feedback').innerText = "Game Over! Your final score is " + score;
+            const n = document.getElementById("chan");
+            n.innerText = "Start";
+            n.setAttribute('onclick', 'change()');
+            gameActive = false; 
+            const xhr = new XMLHttpRequest();
+            xhr.open("POST", "{% url 'save_score' %}", true);  // 'save_score' should be the Django URL name
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.setRequestHeader('X-CSRFToken', '{{ csrf_token }}');  // Include CSRF token for security
+        
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    console.log("Score saved successfully!");
+                }
+            };
+        
+            const data = JSON.stringify({
+                'score': score,
+                'game_name': 'Image word Matching Game'  // Name of the game
+            });
+            xhr.send(data);
+        
+            score = 0; 
+            
+            document.getElementById("scoreDisplay").innerText = score; // Reset score display
+            document.getElementById("lettersContainer").innerHTML = ""; // Clear letters    
+
+        }
+
+        function nextWord() {
+            document.getElementById("scoreDisplay").innerText = score; // Display the current score
+            const word = words[Math.floor(Math.random() * words.length)];
+            currentWord = word; // Store the current word
+
+            const img_path = "{% static 'images/' %}" + currentWord + ".PNG";  
+            document.getElementById("imgElement").src = img_path;
+
+            const scrambledLetters = scrambleWord(word);
+            const lettersContainer = document.getElementById("lettersContainer");
+            lettersContainer.innerHTML = ""; // Clear previous letters
+
+            scrambledLetters.forEach((letter) => {
+                const letterElement = document.createElement("div");
+                letterElement.className = "letter";
+                letterElement.textContent = letter;
+                letterElement.setAttribute("draggable", "true");
+
+                // Drag events
+                letterElement.ondragstart = () => {
+                    letterElement.classList.add("dragging");
+                };
+                letterElement.ondragend = () => {
+                    letterElement.classList.remove("dragging");
+                    clearOverEffects();
+                };
+                letterElement.ondragover = (e) => {
+                    e.preventDefault();
+                    const draggedElement = document.querySelector('.dragging');
+                    if (draggedElement !== letterElement) {
+                        letterElement.classList.add("over");
+                    }
+                };
+                letterElement.ondragleave = () => {
+                    letterElement.classList.remove("over");
+                };
+                letterElement.ondrop = (e) => {
+                    e.preventDefault();
+                    const draggedElement = document.querySelector('.dragging');
+                    if (draggedElement && draggedElement !== letterElement) {
+                        const draggedText = draggedElement.textContent;
+                        const targetText = letterElement.textContent;
+
+                        draggedElement.textContent = targetText;
+                        letterElement.textContent = draggedText;
+                    }
+                    clearOverEffects();
+                };
+
+                lettersContainer.appendChild(letterElement);
+            });
+        }
+
+        function scrambleWord(word) {
+            return word.split('').sort(() => Math.random() - 0.5);
+        }
+
+        function checkWord() {
+            const arrangedWord = Array.from(document.querySelectorAll('.letter')).map(letter => letter.textContent).join('');
+            const feedback = document.getElementById("feedback");
+
+            if (arrangedWord === currentWord) {
+                score++;
+                feedback.textContent = "Correct! Well done!";
+                nextWord(); // Go to the next word
+            } else {
+                feedback.textContent = "Try again!";
+            }
+            document.getElementById("scoreDisplay").innerText = score; // Update the score display
+        }
+
+        function clearOverEffects() {
+            const letters = document.querySelectorAll('.letter');
+            letters.forEach(letter => {
+                letter.classList.remove("over");
+            });
+        }
+    </script>
+    <script src="{%static 'js/settings.js'%}"></script>
+
+</body>
+</html>

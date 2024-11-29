@@ -1,0 +1,278 @@
+ 
+        .icon-text-wrapper {
+            display: flex;
+            align-items: center;
+        }
+        .icon-text-wrapper svg {
+            vertical-align: middle;
+            transition: transform 0.3s ease, fill 0.3s ease;
+            cursor: pointer;
+        }
+        .icon-text-wrapper .text {
+            margin-left: 8px;
+        }
+        .icon-text-wrapper svg:hover {
+            transform: scale(1.1);
+            fill: #ff5722;
+        }
+        .icon-text-wrapper svg.clicked {
+            transform: scale(1.2);
+            fill: #ff5722;
+        }
+        body {
+            font-family: "Poppins", sans-serif;
+            color: #333333;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            transition: background-color 0.3s, color 0.3s, font-family 0.3s, font-size 0.3s;
+        }
+        .navbar {
+            background: linear-gradient(135deg, #5a2a8f, #7335b7);
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .navbar ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0 10px;
+            display: flex;
+            align-items: center;
+        }
+        .navbar li {
+            position: relative;
+            margin: 0 15px;
+            color: white;
+            line-height: 1.2;
+        }
+        .dropdown {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 1;
+        }
+        .navbar li:hover .dropdown {
+            display: block;
+        }
+        .dropdown button {
+            display: block;
+            width: 100%;
+            padding: 12px 20px;
+            background-color: transparent;
+            color: #333333;
+            border: none;
+            text-align: left;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .dropdown button:hover {
+            background-color: #f4f4f4;
+        }
+        .dark-mode {
+            background-color: #333;
+            color: white;
+        }
+        .dark-mode .navbar {
+            background: linear-gradient(135deg, #1f1f1f, #4f4f4f);
+        }
+        .hero_area {    
+            min-height : 20vh;
+            height: 30vh;
+        }           
+        h1{ 
+            color : white;
+            display: block;
+    font-size: 2em;
+    margin-block-start: 0.67em;
+    margin-block-end: 0.67em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    font-weight: bold;
+    unicode-bidi: isolate;
+        }
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between; /* Distributes space between items */
+            align-items: center;
+            margin: 20px auto;
+            width: 100%;
+            max-width: 1200px; /* Restrict the container width */
+            padding: 0 20px;
+            box-sizing: border-box;
+        }
+        
+        .card {
+            background-color: #ffffff;
+            border: 1px solid #dcdcdc;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+            width: calc(30% - 30px); /* Keep 3 cards per row with spacing */
+            text-align: center;
+            flex: 1 1 30%; /* Maintain 30% width and ensure responsiveness */
+            height: 250px; /* Set a fixed height for all cards */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between; /* Space content inside evenly */
+        }
+        
+        .card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        .game-btn {
+            background-color: #7335b7;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 12px 20px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            width: 100%; /* Button takes full card width */
+            box-sizing: border-box;
+        }
+        
+        .game-btn:hover {
+            background-color: #5a2a8f;
+        }
+        
+        @media (max-width: 768px) {
+            .card {
+                width: calc(45% - 30px); /* Adjust to 2 cards per row on smaller screens */
+                height: 230px; /* Adjust height for smaller screens */
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .card {
+                width: calc(100% - 30px); /* Full width card on very small screens */
+                height: 220px; /* Adjust height for smaller screens */
+            }
+        }
+        
+        body {
+            font-family: "Poppins", sans-serif;
+            color: #333333;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0; 
+            text-align: center;
+        }
+        
+        .layout_padding {
+            padding: 80px 0;
+        }
+        
+        /* Heading Styles */
+        .heading_container {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .heading_container h2 {
+            font-size: 36px;
+            font-weight: 600;
+            position: relative;
+            margin-bottom: 20px;
+            color: #333333;
+        }
+        
+        .heading_container h2 span {
+            color: #7335b7;
+        }
+        button {
+            display: inline-block;
+            padding: 12px 25px;
+            background-color: #7335b7;
+            color: #ffffff;
+            border-radius: 8px;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+            margin: 15px 0;
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        button:hover {
+            background-color: #5a2a8f;
+            transform: translateY(-4px);
+        }
+        
+        /* Improved Layout and Padding */
+        .container {
+            width: 100%;
+            margin: 0 auto;
+            padding: 20px;
+            box-sizing: border-box;
+            text-align: center;
+        }
+        
+        .container button {
+            width: 80%;
+            margin: 10px auto;
+            max-width: 300px;
+        }
+        
+        .container button:first-child {
+            margin-top: 40px;
+        }
+        
+        @media (max-width: 768px) {
+            .hero_area {
+                height: auto;
+                padding: 50px 0;
+                text-align: center;
+                border-bottom-left-radius: 150px;
+            }
+        
+            .heading_container h2 {
+                font-size: 28px;
+            }
+        
+            .container button {
+                width: 90%;
+            }
+        }
+        .container {
+            display: flex;
+            flex-wrap: wrap; /* Allow cards to wrap to the next line */
+            justify-content: center; /* Center the cards in the container */
+        }
+        
+        .card {
+            background: #fff; /* Card background */
+            border-radius: 8px; /* Rounded corners */
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Shadow effect */
+            margin: 15px; /* Space between cards */
+            padding: 20px; /* Space inside the card */
+            width: 200px; /* Set a fixed width for cards */
+            display: flex; /* Use flexbox for alignment */
+            flex-direction: column; /* Stack content vertically */
+            align-items: center; /* Center align items */
+            text-align: center; /* Center text inside the card */
+        }
+        
+        .card-content {
+            display: flex; /* Use flexbox */
+            flex-direction: column; /* Stack content vertically */
+            justify-content: center; /* Center vertically */
+            align-items: center; /* Center horizontally */
+        }
+        
+        .card-image {
+            width: 100px; /* Set the desired width */
+            height: auto; /* Maintain aspect ratio */
+            margin-bottom: 10px; /* Space between image and button */
+        }

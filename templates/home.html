@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <meta name="keywords" content="" />
+  <meta name="description" content="" />
+  <meta name="author" content="" />
+
+  <title>ReadEz</title>
+
+
+  {% load static %}
+  <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}" />
+  
+  <link href="{% static 'css/font-awesome.min.css' %}" rel="stylesheet" />
+  
+  <link href="{% static 'css/style.css' %}" rel="stylesheet" />
+  
+  <link href="{% static 'css/responsive.css' %}" rel="stylesheet" />  
+  <link href="{% static 'css/base.css' %}" rel="stylesheet" />
+
+  
+
+</head>
+
+<body>
+
+  <div class="hero_area">
+    <!-- header section strats -->
+    <header class="header_section">
+      <div class="container-fluid">
+        <nav class="navbar navbar-expand-lg custom_nav-container ">
+          <a class="navbar-brand" href={% url 'home'%}>
+            <span style="display: flex; align-items: center;" class="icon-text-wrapper">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="32" height="32" style="vertical-align: middle;">
+                  <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+                  <path d="M160 96a96 96 0 1 1 192 0A96 96 0 1 1 160 96zm80 152l0 264-48.4-24.2c-20.9-10.4-43.5-17-66.8-19.3l-96-9.6C12.5 457.2 0 443.5 0 427L0 224c0-17.7 14.3-32 32-32l30.3 0c63.6 0 125.6 19.6 177.7 56zm32 264l0-264c52.1-36.4 114.1-56 177.7-56l30.3 0c17.7 0 32 14.3 32 32l0 203c0 16.4-12.5 30.2-28.8 31.8l-96 9.6c-23.2 2.3-45.9 8.9-66.8 19.3L272 512z"/>
+              </svg>
+              <span style="margin-left: 8px;">ReadEz</span>
+          </span>
+          
+          </a>
+
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class=""> </span>
+          </button>
+
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav  ">
+              <li class="nav-item active">
+                <a class="nav-link" href="{%url 'home'%}">Home <span class="sr-only">(current)</span></a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{%url 'user-progress'%}">My Learning</a>
+              </li>
+             
+              <li class="nav-item">
+                <a class="nav-link" href="#">Settings</a>
+                <div class="dropdown">
+                  <button id="toggleTheme">Toggle Theme</button>
+                  <button id="fontSelectButton">Change Font Style</button>
+                  <button id="fontSizeButton">Change Font Size</button>
+                  <button id="letterSpacingButton">Change letter distance</button>
+                            <div id="letterSpacingDialog" style="display: none;">
+                                <label for="letterSpacing">Letter Spacing:</label>
+                                <input type="number" id="letterSpacing" placeholder="e.g., 2" step="0.1">
+                                <button id="setSpacingButton">Set Spacing</button>
+                            </div>
+              </div>
+                
+              </li>
+            </ul>
+            <div class="quote_btn-container">
+              {% if user.is_authenticated %}
+                  <!-- Show Update Profile button if user is logged in -->
+                  <a href="{% url 'logout' %}" class="quote_btn">
+                      Logout
+                  </a>
+              {% else %}
+                  <!-- Show Login/Signup button if user is not logged in -->
+                  <a href="{% url 'login' %}" class="quote_btn">
+                      Login/Signup
+                  </a>
+              {% endif %}
+          </div>
+          </div>
+        </nav>
+      </div>
+    </header>
+    <!-- end header section -->
+    <!-- slider section -->
+    <section class="slider_section ">
+      <div id="customCarousel1" class="carousel slide" data-ride="carousel">
+        <div class="carousel-inner">
+          <div class="carousel-item active">
+            <div class="container ">
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="img-box">
+                    <img src="https://cdn-icons-png.flaticon.com/512/4863/4863739.png" alt="">
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="detail-box">
+                    <h1>
+                      What's Dyslexia?
+                    </h1>
+                    <p>
+                      Dyslexia is a learning disability characterized by difficulty in reading due to problems with decoding and processing language. It often affects reading fluency, comprehension, and spelling despite normal intelligence and sensory abilities.
+                    </p>
+                    <div class="btn-box">
+                      <a href="{% url 'simulator' %}"class="btn1">
+                        Try Dyslexia Simulator
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="carousel-item ">
+            <div class="container ">
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="img-box">
+                    <img src="https://www.logodesign.net/images/banner-dyslexia.png" alt="">
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="detail-box">
+                    <h1>
+                      Does your child have dyslexia?
+                    </h1>
+                    <p>
+                      Take this test to get an approximate result!
+                    </p>
+                    <div class="btn-box">
+                      <a href="{% url 'test' %}" class="btn1">
+                       Take Test
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="carousel-item ">
+            <div class="container ">
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="img-box">
+                    <img src="{%static 'images22/slider-img.png'%}" alt="">
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="detail-box">
+                    <h1>
+                      Dyslexia friendly services!
+                    </h1>
+                    <p>
+                     Make your reading and learning easy with the help of some specialised tools 
+                    </p>
+                    <div class="btn-box">
+                      <a href="#go" class="btn1">
+                     Services
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="carousel-item ">
+            <div class="container ">
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="img-box">
+                    <img src="{%static 'images22/growth.png'%}" alt="">
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="detail-box">
+                    <h1>
+                      Track Your Progress!
+                    </h1>
+                    <p>
+                      
+                    Know about your learning progress through a dashboard.
+                    </p>
+                    <div class="btn-box">
+                      <a href="{% url 'user-progress' %}" class="btn1">
+                       Go to My Learning
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="carousel-item ">
+            <div class="container ">
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="img-box">
+                    <img src="{%static 'images22/audio-book.png'%}" alt="">
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="detail-box">
+                    <h1>
+                      Facing problem to use our website?
+                    </h1>
+                    <p>
+                    Watch these tutorials to get help regarding the usage of any section of this website
+                    </p>
+                    <div class="btn-box">
+                      <a href="#watch" class="btn1">
+                       Watch 
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <ol class="carousel-indicators">
+          <li data-target="#customCarousel1" data-slide-to="0" class="active"></li>
+          <li data-target="#customCarousel1" data-slide-to="1"></li>
+          <li data-target="#customCarousel1" data-slide-to="2"></li>
+          <li data-target="#customCarousel1" data-slide-to="3"></li>
+          <li data-target="#customCarousel1" data-slide-to="4"></li>
+         
+        </ol>
+      </div>
+
+    </section>
+    <!-- end slider section -->
+  </div>
+
+  <!-- service section -->
+  <section id="go" class="service_section layout_padding">
+    <div class="container">
+      <div class="heading_container">
+        <h2>
+           Services
+        </h2>
+        <p>
+          You can access following features
+        </p>
+      </div>
+      <div class="row">
+        <div class="col-md-6 col-lg-3">
+          <div class="box">
+            <div class="img-box">
+              <img src="{%static 'images22/Smart Class.png'%}" alt="">
+            </div>
+            <div class="detail-box">
+              <h5>
+                Smart Board
+              </h5>
+              <p>
+                "Enable users to draw directly on the board with their mouse. Also provides features like draw shapes, change color ,erase thus boosting the creativity of individuals with dyslexia"
+              </p>
+              <a href="{% url 'whiteb' %}">
+                <span>
+                  Use
+                </span>
+                <i class="fa fa-long-arrow-right" aria-hidden="true"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-3">
+          <div class="box">
+            <div class="img-box">
+              <img src="{%static 'images22/text-speech_9207979.png'%}" alt="">
+            </div>
+            <div class="detail-box">
+              <h5>
+                Speech to text and Text to Speech
+              </h5>
+              <p>
+                "Seamlessly convert text to speech and vice versa, enabling intuitive voice interactions and transcription capabilities."
+              </p>
+              <a href="{% url 'both' %}">
+                <span>
+                  Use
+                </span>
+                <i class="fa fa-long-arrow-right" aria-hidden="true"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-3">
+          <div class="box">
+            <div class="img-box">
+              <img src= "{%static 'images22/Scan Image.png'%}" alt="">
+            </div>
+            <div class="detail-box">
+              <h5>
+               Learning modules
+              </h5>
+              <p>
+                
+"Engaging learning modules with fun, game-based activities designed to support and enhance learning for individuals with dyslexia."
+              </p>
+              <a href="{% url 'games' %}">
+                <span>
+                  Use
+                </span>
+                <i class="fa fa-long-arrow-right" aria-hidden="true"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-3">
+          <div class="box">
+            <div class="img-box">
+              <img src="{%static 'images22/Notes.png'%}" alt="">
+            </div>
+            <div class="detail-box">
+              <h5>
+               Your Notes
+              </h5>
+              <p>
+                "Quickly capture and organize your thoughts with an intuitive note-taking feature.Also stores the notes with an exact date and time for easy access aiding dyslexic patients"
+              </p>
+              <a href="{% url 'notes' %}">
+                <span>
+                 Use
+                </span>
+                <i class="fa fa-long-arrow-right" aria-hidden="true"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="btn-box">
+        
+      </div>
+    </div>
+  </section>
+  <!-- end service section -->
+
+  <!-- about section -->
+
+  <section class="about_section layout_padding">
+    <div class="container  ">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="detail-box">
+            <div class="heading_container">
+              <h2>
+                About Us
+              </h2>
+            </div>
+            <p>
+              
+
+              At ReadEz, we simplify how you interact with information. Our innovative tools—featuring smart boards, text-to-speech, speech-to-text, image scanning, and note-taking—are designed to make reading, writing, and learning seamless and efficient. We aid your learning experience by providing simple,user-friendly lessons,quiz,games that help you understand with more with ease!
+            </p>
+            
+            </a>
+          </div>
+        </div>
+        <div class="col-md-6 ">
+          <div class="img-box">
+            <img src="{%static 'images22/about-img.png'%}" alt="">
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- end about section -->
+
+  <!-- case section -->
+
+  <section class="case_section layout_padding">
+    <div class="container">
+      <div class="heading_container">
+        <h2>
+          Additional Features
+        </h2>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="box">
+            <div class="img-box">
+              <img src="{%static 'images22/case-1.jpg'%}" alt="">
+            </div>
+            <div class="detail-box">
+              <h5>
+                Session with Experts
+              </h5>
+              <p>
+                
+                "Gain valuable insights and personalized advice from dyslexia specialists through our one-on-one sessions. Get tailored support to address your specific needs and questions."
+              </p>
+              <a href="">
+                <span>
+                  Contact
+                </span>
+                <i class="fa fa-long-arrow-right" aria-hidden="true"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="box">
+            <div class="img-box">
+              <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRHTDsaJjMGJcA0GpCnadbroSRcv6rK3aufEA&s" alt="">
+            </div>
+            <div class="detail-box">
+              <h5>
+               Read articles
+              </h5>
+              <p>
+                "Access a range of informative articles and resources to deepen your understanding of dyslexia and explore effective strategies and support." Alteration in some form, by injected humour, or randomised words which don't look even slightly believable.
+              </p>
+              <a href="{%url 'article'%}">
+                <span>
+                  Read More
+                </span>
+                <i class="fa fa-long-arrow-right" aria-hidden="true"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- end case section -->
+
+  <!-- client section -->
+  <section id="watch"class="client_section ">
+    <div class="container">
+      <div class="heading_container heading_center">
+        <h2>
+          How to Use ReadEz?
+        </h2>
+        <p>Explore our interactive tutorials to quickly learn how to navigate and make the most of ReadEz's features.</p>
+      </div>
+    </div>
+    <div id="customCarousel2" class="carousel slide" data-ride="carousel">
+      <div class="carousel-inner">
+        <div class="carousel-item active">
+          <div class="container">
+            <div class="row">
+              <div class="col-md-10 mx-auto">
+                <div class="box">
+                  
+                  <div class="detail-box">
+                    <div class="client_info">
+                      <div class="client_name">
+                        <h5>
+                         Settings Tutorial
+                        </h5>
+                        <h6>
+                          Customer
+                        </h6>
+                      </div>
+                      <i class="fa fa-quote-left" aria-hidden="true"></i>
+                    </div>
+                    <p>
+                      Welcome to the settings page! Here, you can customize the website for a more comfortable experience. Toggle between light and dark themes, adjust the font style and size, and change letter spacing to suit your reading preferences.
+                      <div class="video-container">
+                        <video class="d-block w-100" controls>
+                          <source src="{%static 'vid/first.mp4'%}" type="video/mp4">
+                          Your browser does not support the video tag.
+                        </video>
+                      </div>
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="carousel-item">
+          <div class="container">
+            <div class="row">
+              <div class="col-md-10 mx-auto">
+                <div class="box">
+                  
+                  <div class="detail-box">
+                    <div class="client_info">
+                      <div class="client_name">
+                        <h5>
+                          Services Tutorial
+                        </h5>
+                        <h6>
+                          Customer
+                        </h6>
+                      </div>
+                      <i class="fa fa-quote-left" aria-hidden="true"></i>
+                    </div>
+                    <p>
+                      Use the whiteboard to draw lines, shapes like circles and rectangles, erase, clear, and change colors. Take advantage of text-to-speech and speech-to-text features for ease of communication. Explore learning modules with 6 engaging games: letter-sound matching, image words, rhyming words, Let’s Learn Math, flashcards, and a number matching game. Plus, you can store and organize your thoughts in the Take Notes section
+                      <div class="video-container">
+                        <video class="d-block w-100" controls>
+                          <source src="{%static 'vid/second.mp4'%}" type="video/mp4">
+                          Your browser does not support the video tag.
+                        </video>
+                      </div>
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="carousel-item">
+          <div class="container">
+            <div class="row">
+              <div class="col-md-10 mx-auto">
+                <div class="box">
+                  
+                  <div class="detail-box">
+                    <div class="client_info">
+                      <div class="client_name">
+                        <h5>
+                         My Learning Tutorial
+                        </h5>
+                        <h6>
+                          Customer
+                        </h6>
+                      </div>
+                      <i class="fa fa-quote-left" aria-hidden="true"></i>
+                    </div>
+                    <p>
+                      Track your learning progress through detailed graphs and pie charts. After logging in, you'll be able to see your performance in various learning modules, visualize your achievements, and monitor improvement areas in an easy-to-understand format.
+                      <div class="video-container">
+                        <video class="d-block w-100" controls>
+                          <source src="{%static 'vid/third.mp4'%}" type="video/mp4">
+                          Your browser does not support the video tag.
+                        </video>
+                      </div>
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <ol class="carousel-indicators">
+        <li data-target="#customCarousel2" data-slide-to="0" class="active"></li>
+        <li data-target="#customCarousel2" data-slide-to="1"></li>
+        <li data-target="#customCarousel2" data-slide-to="2"></li>
+      </ol>
+    </div>
+  </section>
+  <!-- end client section -->
+
+
+
+  <!-- contact section -->
+
+ 
+
+  <!-- end contact section -->
+
+  <div class="footer_container">
+    <!-- info section -->
+
+    <section class="info_section ">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-6 col-lg-3 ">
+            <div class="info_detail">
+              <h4>
+                ReadEz
+              </h4>
+              <p>
+                ReadEz offers intuitive tools to enhance your digital experience, from smart text-to-speech features to interactive note-taking. Simplify your reading, writing, and learning with our innovative solutions.
+              </p>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-2 mx-auto">
+            <div class="info_link_box">
+              <h4>
+                Links
+              </h4>
+              <div class="info_links">
+                <a class="" href="{%url 'home'%}">
+                  Home
+                </a>
+                <a class=""  href="{%url 'user-progress'%}">
+                  My Learning
+                </a>
+               
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-3 ">
+            <h4>
+              Give Feedback
+            </h4>
+            <form action="#">
+              <input type="text" placeholder="Enter" />
+              <button type="submit">
+                Submit
+              </button>
+            </form>
+          </div>
+          <div class="col-md-6 col-lg-3 mb-0 ml-auto">
+            <div class="info_contact">
+              <h4>
+                Contact Us
+              </h4>
+              
+            <div class="info_social">
+              <a href="">
+                <i class="fa fa-facebook" aria-hidden="true"></i>
+              </a>
+              <a href="">
+                <i class="fa fa-twitter" aria-hidden="true"></i>
+              </a>
+              <a href="">
+                <i class="fa fa-linkedin" aria-hidden="true"></i>
+              </a>
+              <a href="">
+                <i class="fa fa-instagram" aria-hidden="true"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- end info section -->
+
+    <!-- footer section -->
+    <footer class="footer_section">
+      <div class="container">
+        <p>
+          &copy; <span id="displayYear"></span> All Rights Reserved
+        </p>
+      </div>
+    </footer>
+    <!-- footer section -->
+  </div>
+
+ <!-- jQery -->
+ <script src="{%static 'js/jquery-3.4.1.min.js'%}"></script>
+ <!-- popper js -->
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous">
+ </script>
+ <!-- bootstrap js -->
+ <script src="{%static 'js/bootstrap.js'%}"></script>
+ <script src="{%static 'js/custom.js'%}"></script>
+ <!-- Google Map -->
+ <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCh39n5U-4IoWpsVGUHWdqB6puEkhRLdmI&callback=myMap"></script>
+ <!-- End Google Map -->
+ <script src="{%static 'js/settings.js'%}"></script>
+
+
+</body>
+
+
+</html>
